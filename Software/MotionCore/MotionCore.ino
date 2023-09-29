@@ -21,7 +21,7 @@ Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
 #define SERVOMAX  525 // This is the 'maximum' pulse length count (out of 4096)
 #define SERVO_FREQ 50 // Analog servos run at ~50 Hz updates
 
-// #define DEBUG 0
+#define DEBUG 0
 
 #define maxlength 93
 #define minlength 62
@@ -74,16 +74,16 @@ void setup() {
 
 void setServos() {
   int pwmVal;
-  for(int i = 0; i < 14; i ++) {
+  for(int i = 0; i < 16; i ++) {
     
     pwmVal = map(ServoPositions[i], 0, 180, SERVOMIN, SERVOMAX);
     #ifdef DEBUG == 1
       Serial.print(ServoPositions[i]);
-      Serial.print(",");
-      Serial.println(pwmVal);
+      Serial.print(", ");
     #endif
     pwm.setPWM(i, 0, pwmVal);
   }
+  Serial.println("");
 }
 
 void CalcHeightAngles(float dis, float * ServoPositions, int LegNum) {
@@ -105,12 +105,41 @@ void CalcHeightAngles(float dis, float * ServoPositions, int LegNum) {
   // t1 = 180-t1 -10;
   // t2 = map(t2, 170, 60, 90, 200);
   
-  ServoPositions[0] = t1;
-  ServoPositions[1] = t2;
+  ServoPositions[LegMapping[LegNum][1]] = t1;
+  ServoPositions[LegMapping[LegNum][2]] = t2;
   #ifdef DEBUG
-  Serial.print(ServoPositions[0]);
-  Serial.print(",");
-  Serial.println(ServoPositions[1]);
+  // Serial.print(ServoPositions[0]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[1]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[2]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[3]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[4]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[5]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[6]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[7]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[8]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[9]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[10]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[11]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[12]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[13]);
+  // Serial.print(",");
+  // Serial.print(ServoPositions[14]);
+  // Serial.print(",");
+  // Serial.println(ServoPositions[15]);
+  
   #endif
 }
 
@@ -125,7 +154,10 @@ void loop() {
   float dis = 60;
 
   while(dis < 95) {
+    CalcHeightAngles(dis, ServoPositions, 2);
     CalcHeightAngles(dis, ServoPositions, 3);
+    CalcHeightAngles(dis, ServoPositions, 4);
+    CalcHeightAngles(dis, ServoPositions, 5);
     delay(100);
     setServos();
     dis++;
